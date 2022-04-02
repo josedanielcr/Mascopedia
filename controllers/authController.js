@@ -1,4 +1,4 @@
-const { request, response} = require('express');
+const { request, response } = require('express');
 const { BasicRetrieveOperation } = require('../database/CrudOperations');
 const { generateJwt } = require('../helpers/jsonWebToken');
 const { comparePwd } = require('../helpers/password-encryption');
@@ -12,7 +12,7 @@ const { comparePwd } = require('../helpers/password-encryption');
  * @returns The user and the token
  * @author jcanales
  */
-const login = async( req = request, res = response ) => {
+const login = async(req = request, res = response) => {
 
     const { email, password } = req.body;
 
@@ -22,39 +22,39 @@ const login = async( req = request, res = response ) => {
         const retrievedUser = userTemp[0];
 
         //user validations
-        if ( !retrievedUser ) {
-            return res.status( 400 ).json({
-                msg : `An user with the ${ email } doesn't exist`
+        if (!retrievedUser) {
+            return res.status(400).json({
+                msg: `A user with the ${ email } doesn't exists`
             })
         };
-    
-        if ( retrievedUser.status != 'ACTV' ){
-            return res.status( 400 ).json({
-                msg : `The user with the ${ email } isn't active, please contact to your administrator`
-            })
-        };
-    
-        //user password check
-        if ( !comparePwd( password, retrievedUser.password ) ){
-            return res.status( 400 ).json({
-                msg : `Incorrect password, please try again`
-            })
-        };
-    
-        //generate token
-        const token = await generateJwt( retrievedUser.id );
 
-        return res.status( 200 ).json({
+        if (retrievedUser.status != 'ACTV') {
+            return res.status(400).json({
+                msg: `The user with the ${ email } isn't active, please contact to your administrator`
+            })
+        };
+
+        //user password check
+        if (!comparePwd(password, retrievedUser.password)) {
+            return res.status(400).json({
+                msg: `Incorrect password, please try again`
+            })
+        };
+
+        //generate token
+        const token = await generateJwt(retrievedUser.id);
+
+        return res.status(200).json({
             retrievedUser,
             token
         });
-        
+
     } catch (error) {
-        return res.status( 500 ).json({
-            msg : `An internal error has ocurred, if the error persist, please contact to your administrator`
+        return res.status(500).json({
+            msg: `An internal error has ocurred, if the error persist, please contact to your administrator`
         });
     }
-   
+
 }
 
 
