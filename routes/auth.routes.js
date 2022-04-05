@@ -5,7 +5,7 @@ const { checkFields } = require('../middlewares/index');
 
 const router = Router();
 
-//login
+//login public
 router.post('/login',[
     check( 'email' , 'You must provide en email').isEmail(),
     check( 'password' , 'You must provide a passaword').not().isEmpty(),

@@ -6,9 +6,7 @@ const { checkFields } = require('../middlewares/index');
 const router = Router();
 
 
-//users post
-//TODO: checkear que la edad sea valida
-//TODO: password valido - encriptar
+//users post - public
 router.post('/', [
     check('fullName', 'You must provide a name').not().isEmpty(),
     check('email', 'You must provide an email').not().isEmpty(),
