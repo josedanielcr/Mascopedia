@@ -1,15 +1,14 @@
 const { Router } = require('express');
-const { getDogBreeds } = require('../controllers/dogsController');
+const { getCats } = require('../controllers/catsController');
 const { checkFields, validateJwt } = require('../middlewares/index');
 
 const router = Router();
 
-
-//gets dogs(20) - private( token )
+//gets cats(12) - private( token )
 router.get('/', [
     validateJwt,
     checkFields
-], getDogBreeds );
+], getCats );
 
 
 module.exports = router;

@@ -19,7 +19,7 @@ const login = async(req = request, res = response) => {
     try {
 
         const userTemp = await BasicRetrieveOperation(`SELECT * from c where c.email = "${ email }"`);
-        const retrievedUser = userTemp[0];
+        const {_rid,_self,_etag,_attachments,_ts,...retrievedUser} = userTemp[0];
 
         //user validations
         if (!retrievedUser) {
@@ -43,6 +43,7 @@ const login = async(req = request, res = response) => {
 
         //generate token
         const token = await generateJwt(retrievedUser.id);
+        delete retrievedUser.password;
 
         return res.status(200).json({
             retrievedUser,

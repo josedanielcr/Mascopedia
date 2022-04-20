@@ -25,7 +25,8 @@ class Server {
         this.routes  = {
             users : '/api/users',
             auth  : '/api/auth',
-            dogs  : '/api/dogs'
+            dogs  : '/api/dogs',
+            cats  : '/api/cats'
         }
         /**
         * Database connection, middlewares and routes
@@ -69,6 +70,7 @@ class Server {
         this.app.use( this.routes.users, require( '../routes/users.routes' ) );
         this.app.use( this.routes.auth , require( '../routes/auth.routes' ) );
         this.app.use( this.routes.dogs , require( '../routes/dogs.routes' ) );
+        this.app.use( this.routes.cats , require( '../routes/cats.routes' ) );
     }
 
     /**
