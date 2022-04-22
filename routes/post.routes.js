@@ -4,7 +4,8 @@ const {
     createPost,
     getPosts,
     getMyPosts,
-    editPost
+    editPost,
+    deletePost
 } = require('../controllers/postController');
 
 const {
@@ -46,6 +47,11 @@ router.post('/editPost', [
     checkFields,
     validateJwt
 ], editPost);
+
+router.delete('/deletePost', [
+
+    validateJwt
+], deletePost);
 
 /*router.post('/createPost', [
     check('authorName', 'You must provide a name').not().isEmpty(),
