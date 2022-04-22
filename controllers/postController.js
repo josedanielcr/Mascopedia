@@ -91,9 +91,30 @@ const editPost = async(req = request, res = response) => {
 
 
 }
+
+const deletePost = async(req = request, res = response) => {
+
+    const { id } = req.body;
+    try {
+        const deletedPost = await BasicDeleteOperation(id);
+        return res.status(200).json({ msg: 'The post was deleted' });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            msg: 'An error has ocurred, please contact to your administrator'
+        })
+
+    }
+
+
+}
+
+
 module.exports = {
     createPost,
     getPosts,
     getMyPosts,
-    editPost
+    editPost,
+    deletePost
 }
