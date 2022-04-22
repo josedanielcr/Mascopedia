@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { getDogBreeds, getDogBreedByName } = require('../controllers/dogsController');
+const { getAllAnimals, getAnimalsByName } = require('../controllers/animalController');
 const { checkFields, validateJwt } = require('../middlewares/index');
 
 const router = Router();
@@ -9,12 +9,12 @@ const router = Router();
 router.get('/', [
     validateJwt,
     checkFields
-], getDogBreeds );
+], getAllAnimals );
 
 //get dog by name - private( token )
 router.get('/:name', [
     validateJwt,
     checkFields
-], getDogBreedByName );
+], getAnimalsByName );
 
 module.exports = router;
