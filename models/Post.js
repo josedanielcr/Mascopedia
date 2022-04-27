@@ -11,9 +11,10 @@ const PostModel = class Post {
     text; //editar 
     breed;
     likes;
+    breedType;
 
 
-    constructor(authorName, authorEmail, title, text, breed) {
+    constructor(authorName, authorEmail, title, text, breed, breedType) {
         this.id = uuidv4();
         this.doc = "post";
         this.authorName = authorName;
@@ -21,7 +22,8 @@ const PostModel = class Post {
         this.title = title;
         this.text = text;
         this.breed = breed;
-        /*this.likes = likes;*/
+        this.breedType = breedType;
+
 
     }
 

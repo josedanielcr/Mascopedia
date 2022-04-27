@@ -16,11 +16,11 @@ const { PostModel } = require('../models/post');
  */
 const createPost = async(req = request, res = response) => {
 
-    const { authorName, authorEmail, title, text, breed } = req.body;
+    const { authorName, authorEmail, title, text, breed, breedType } = req.body;
 
     try {
 
-        const postTmp = new PostModel(authorName, authorEmail, title, text, breed);
+        const postTmp = new PostModel(authorName, authorEmail, title, text, breed, breedType);
         const createdPost = await BasicInsertOperation(postTmp);
         return res.status(200).json(createdPost);
 
@@ -74,10 +74,10 @@ const getMyPosts = async(req = request, res = response) => {
 }
 const editPost = async(req = request, res = response) => {
 
-    const { id, authorName, authorEmail, title, text, breed } = req.body;
+    const { id, authorName, authorEmail, title, text, breed, breedType } = req.body;
     try {
 
-        const postTmp = new PostModel(authorName, authorEmail, title, text, breed);
+        const postTmp = new PostModel(authorName, authorEmail, title, text, breed, breedType);
         const editedPost = await BasicUpdateOperation(id, postTmp);
         return res.status(200).json(editedPost);
 
@@ -107,6 +107,46 @@ const deletePost = async(req = request, res = response) => {
 
     }
 
+}
+
+
+const getPostsByBreedId = async( req = request, res = response ) => {
+
+    const { id, type } = req.params;
+    let data = [];
+    let posts
+
+    try {
+        if(type === 'dog') {
+            posts = await BasicRetrieveOperation(`SELECT * from c where c.doc= "post" AND c.breed=${ id } AND c.breedType="${ type }"`);
+        }
+        else {
+            posts = await BasicRetrieveOperation(`SELECT * from c where c.doc= "post" AND c.breed="${ id }" AND c.breedType="${ type }"`);
+        }
+
+        posts.map( ( post ) => {
+            data.push({
+                id : post.id,
+                authorName : post.authorName,
+                authorEmail: post.authorEmail,
+                title : post.title,
+                text : post.text
+            });
+        } );
+
+        if( posts.length === 0 ){
+            return res.status(500).json({
+                msg: 'No posts found'
+            })
+        }
+
+        return res.status( 200 ).json( data );
+        
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'An error has ocurred, please contact to your administrator'
+        })
+    }
 
 }
 
@@ -116,5 +156,6 @@ module.exports = {
     getPosts,
     getMyPosts,
     editPost,
-    deletePost
+    deletePost,
+    getPostsByBreedId
 }

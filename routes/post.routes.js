@@ -5,7 +5,8 @@ const {
     getPosts,
     getMyPosts,
     editPost,
-    deletePost
+    deletePost,
+    getPostsByBreedId
 } = require('../controllers/postController');
 
 const {
@@ -16,50 +17,47 @@ const {
 const router = Router();
 
 
-//posts post - public
+//posts post - private
+router.post('/', [
 
-router.post('/createPost', [
-
+    validateJwt,
     check('authorName', 'You must provide a name').not().isEmpty(),
     check('authorEmail', 'You must provide an email').isEmail(),
     check('title', 'You must a valid email').not().isEmpty(),
     check('text', 'You must provide a text').not().isEmpty(),
     check('breed', 'You must provide a breed').not().isEmpty(),
+    check('breedType', 'You must provide a breedType').not().isEmpty(),
     checkFields,
-    validateJwt
 ], createPost);
 
+// get all posts - private
 router.get('/getPosts', [
-        validateJwt
-    ],
-    getPosts);
+    validateJwt
+], getPosts);
 
+//get pots by breed id
+router.get('/:id/:type',[
+    validateJwt,
+    checkFields
+], getPostsByBreedId );
+
+// get my posts - private
 router.get('/getMyPosts', [
     validateJwt
-
 ], getMyPosts);
 
+//update posts
 router.post('/editPost', [
-
+    validateJwt,
     check('title', 'You must a valid email').not().isEmpty(),
     check('text', 'You must provide a text').not().isEmpty(),
-
     checkFields,
-    validateJwt
 ], editPost);
 
+//delete posts
 router.delete('/deletePost', [
-
     validateJwt
 ], deletePost);
 
-/*router.post('/createPost', [
-    check('authorName', 'You must provide a name').not().isEmpty(),
-    check('authorEmail', 'You must provide an email').isEmail(),
-    check('title', 'You must a valid email').not().isEmpty(),
-    check('text', 'You must provide a text').not().isEmpty(),
-    check('breed', 'You must provide a breed').not().isEmpty(),
-    checkFields
-], createPost);*/
 
 module.exports = router;
