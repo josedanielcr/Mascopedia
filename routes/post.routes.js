@@ -21,8 +21,6 @@ const router = Router();
 router.post('/', [
 
     validateJwt,
-    check('authorName', 'You must provide a name').not().isEmpty(),
-    check('authorEmail', 'You must provide an email').isEmail(),
     check('title', 'You must a valid email').not().isEmpty(),
     check('text', 'You must provide a text').not().isEmpty(),
     check('breed', 'You must provide a breed').not().isEmpty(),
@@ -42,12 +40,12 @@ router.get('/:id/:type',[
 ], getPostsByBreedId );
 
 // get my posts - private
-router.get('/getMyPosts', [
+router.get('/myPosts', [
     validateJwt
 ], getMyPosts);
 
 //update posts
-router.post('/editPost', [
+router.put('/:id', [
     validateJwt,
     check('title', 'You must a valid email').not().isEmpty(),
     check('text', 'You must provide a text').not().isEmpty(),
@@ -55,7 +53,7 @@ router.post('/editPost', [
 ], editPost);
 
 //delete posts
-router.delete('/deletePost', [
+router.delete('/:id', [ 
     validateJwt
 ], deletePost);
 

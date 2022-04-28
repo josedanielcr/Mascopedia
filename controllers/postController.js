@@ -16,11 +16,14 @@ const { PostModel } = require('../models/post');
  */
 const createPost = async(req = request, res = response) => {
 
-    const { authorName, authorEmail, title, text, breed, breedType } = req.body;
+    const { title, text, breedType } = req.body;
+    let breed = req.body.breed;
+
+    if( breedType === 'dog') breed = Number( breed );
 
     try {
 
-        const postTmp = new PostModel(authorName, authorEmail, title, text, breed, breedType);
+        const postTmp = new PostModel(req.user['fullName'],req.user['email'] , title, text, breed, breedType);
         const createdPost = await BasicInsertOperation(postTmp);
         return res.status(200).json(createdPost);
 
@@ -74,10 +77,18 @@ const getMyPosts = async(req = request, res = response) => {
 }
 const editPost = async(req = request, res = response) => {
 
-    const { id, authorName, authorEmail, title, text, breed, breedType } = req.body;
+    const { title, text } = req.body;
+    const { id } = req.params;
+
     try {
 
-        const postTmp = new PostModel(authorName, authorEmail, title, text, breed, breedType);
+        const myPostToUpdate = await BasicRetrieveOperation(`SELECT * from c where c.doc= "post" AND c.id = "${ id }"`);
+        let postTmp = myPostToUpdate[0];
+        postTmp['title'] = title;
+        postTmp['text'] = text;
+
+        if( postTmp['breedType'] === 'dog') postTmp['breed'] = Number( postTmp['breed'] );
+
         const editedPost = await BasicUpdateOperation(id, postTmp);
         return res.status(200).json(editedPost);
 
@@ -89,14 +100,13 @@ const editPost = async(req = request, res = response) => {
 
     }
 
-
 }
 
 const deletePost = async(req = request, res = response) => {
 
-    const { id } = req.body;
+    const { id } = req.params;
     try {
-        const deletedPost = await BasicDeleteOperation(id);
+        await BasicDeleteOperation(id);
         return res.status(200).json({ msg: 'The post was deleted' });
 
     } catch (error) {
